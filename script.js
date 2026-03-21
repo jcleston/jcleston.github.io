@@ -5,23 +5,25 @@ async function carregarPresentes() {
         const res = await fetch(API_URL);
         const dados = await res.json();
 
+        console.log("DADOS:", dados); // 👈 DEBUG
+
         const lista = document.getElementById("lista");
         lista.innerHTML = "";
 
         dados.forEach(item => {
-            if (item.status === "disponivel") {
+            if (item.status && item.status.toLowerCase().includes("dispon")) {
 
                 const card = document.createElement("div");
                 card.className = "card";
 
                 card.innerHTML = `
-          <img src="${item.imagem}" alt="${item.presente}">
-          <div class="card-content">
-            <h3>${item.presente}</h3>
-            <a href="${item.link}" target="_blank">Ver produto</a>
-            <button onclick="reservar(${item.id})">Reservar</button>
-          </div>
-        `;
+                    <img src="${item.imagem || 'https://via.placeholder.com/300'}" alt="${item.presente}">
+                    <div class="card-content">
+                        <h3>${item.presente}</h3>
+                        <a href="${item.link}" target="_blank">Ver produto</a>
+                        <button onclick="reservar(${item.id})">Reservar</button>
+                    </div>
+                `;
 
                 lista.appendChild(card);
             }
