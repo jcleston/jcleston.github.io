@@ -1,11 +1,27 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbxcSwNMDZsidDrp2FVvuoVw4ZsJvR6W_CIYxyokNra5rJn3OjEmW66OEMvYJy0cVlBg/exec";
 
+// =======================
+// PRELOADER
+// =======================
+function mostrarLoader() {
+    document.getElementById("preloader").style.display = "flex";
+}
+
+function esconderLoader() {
+    document.getElementById("preloader").style.display = "none";
+}
+
+// =======================
+// CARREGAR PRESENTES
+// =======================
 async function carregarPresentes() {
+    mostrarLoader();
+
     try {
         const res = await fetch(API_URL);
         const dados = await res.json();
 
-        console.log("DADOS:", dados); // 👈 DEBUG
+        console.log("DADOS:", dados);
 
         const lista = document.getElementById("lista");
         lista.innerHTML = "";
@@ -33,8 +49,13 @@ async function carregarPresentes() {
         console.error("Erro ao carregar:", erro);
         alert("Erro ao carregar lista.");
     }
+
+    esconderLoader();
 }
 
+// =======================
+// RESERVAR PRESENTE
+// =======================
 async function reservar(id) {
     const nome = prompt("Digite seu nome:");
 
@@ -42,6 +63,8 @@ async function reservar(id) {
         alert("Nome obrigatório!");
         return;
     }
+
+    mostrarLoader();
 
     try {
         const res = await fetch(API_URL, {
@@ -60,12 +83,17 @@ async function reservar(id) {
             alert("Já foi reservado!");
         }
 
-        carregarPresentes();
+        await carregarPresentes();
 
     } catch (erro) {
         console.error("Erro:", erro);
         alert("Erro ao reservar.");
     }
+
+    esconderLoader();
 }
 
+// =======================
+// INICIALIZAÇÃO
+// =======================
 carregarPresentes();
