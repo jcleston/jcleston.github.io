@@ -224,3 +224,139 @@ h1 {
         padding: 14px;
     }
 }
+
+/* ========================= */
+/* CONVITE */
+/* ========================= */
+.convite {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.convite h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.convite h2 {
+    margin-bottom: 15px;
+}
+
+.mensagem {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.detalhes {
+    margin-bottom: 30px;
+}
+
+.detalhes p {
+    margin: 5px 0;
+}
+
+/* BOTÃO */
+.btn {
+    display: inline-block;
+    padding: 15px 25px;
+    background: #28a745;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background: #218838;
+}
+
+/* ========================= */
+/* CONTADOR */
+/* ========================= */
+#contador {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+#contador div {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    min-width: 70px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#contador span {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+}
+
+#contador p {
+    margin: 0;
+    font-size: 12px;
+}
+
+/* ========================= */
+/* IMAGENS DE FUNDO DECORATIVAS */
+/* ========================= */
+.bg-img {
+    position: fixed;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: -1;
+    width: 180px;
+    height: 180px;
+}
+
+/* Superior esquerda */
+.img1 {
+    top: 40px;
+    left: 30%;
+    width: 140px;
+    background-image: url('img/img1.jpeg');
+}
+
+/* Meio direita */
+.img2 {
+    top: 50%;
+    right: 32%;
+    transform: translateY(-50%);
+    width: 120px;
+    background-image: url('img/img2.jpeg');
+}
+
+/* Inferior esquerda */
+.img3 {
+    bottom: 120px;
+    left: 30%;
+    width: 180px;
+    background-image: url('img/img3.jpeg');
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .bg-img {
+        width: 120px;
+        height: 120px;
+        opacity: 0.15;
+    }
+
+    .img1 {
+        top: 30px;
+        left: 5%;
+    }
+
+    .img2 {
+        right: 5%;
+    }
+
+    .img3 {
+        bottom: 30px;
+        left: 5%;
+    }
+}
