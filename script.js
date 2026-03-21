@@ -11,33 +11,33 @@ async function carregarPresentes() {
         dados.forEach(item => {
             if (item.status === "disponivel") {
 
-                const div = document.createElement("div");
-                div.className = "item";
+                const card = document.createElement("div");
+                card.className = "card";
 
-                div.innerHTML = `
-          <strong>${item.presente}</strong><br>
-          <a href="${item.link}" target="_blank" onclick="event.stopPropagation()">
-            Ver produto
-          </a>
+                card.innerHTML = `
+          <img src="${item.imagem}" alt="${item.presente}">
+          <div class="card-content">
+            <h3>${item.presente}</h3>
+            <a href="${item.link}" target="_blank">Ver produto</a>
+            <button onclick="reservar(${item.id})">Reservar</button>
+          </div>
         `;
 
-                div.onclick = () => reservar(item.id);
-
-                lista.appendChild(div);
+                lista.appendChild(card);
             }
         });
 
     } catch (erro) {
-        console.error("Erro ao carregar dados:", erro);
-        alert("Erro ao carregar a lista. Tente novamente.");
+        console.error("Erro ao carregar:", erro);
+        alert("Erro ao carregar lista.");
     }
 }
 
 async function reservar(id) {
-    const nome = prompt("Digite seu nome para reservar:");
+    const nome = prompt("Digite seu nome:");
 
     if (!nome || nome.trim() === "") {
-        alert("Nome é obrigatório!");
+        alert("Nome obrigatório!");
         return;
     }
 
@@ -53,18 +53,17 @@ async function reservar(id) {
         const resultado = await res.json();
 
         if (resultado.sucesso) {
-            alert("Presente reservado com sucesso!");
-            carregarPresentes();
+            alert("Reservado com sucesso!");
         } else {
-            alert("Este presente já foi reservado por outra pessoa.");
-            carregarPresentes();
+            alert("Já foi reservado!");
         }
 
+        carregarPresentes();
+
     } catch (erro) {
-        console.error("Erro ao reservar:", erro);
-        alert("Erro ao realizar a reserva.");
+        console.error("Erro:", erro);
+        alert("Erro ao reservar.");
     }
 }
 
-// Inicializa
 carregarPresentes();
