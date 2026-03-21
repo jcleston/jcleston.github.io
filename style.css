@@ -307,7 +307,7 @@ h1 {
     position: fixed;
     background-size: cover;
     background-position: center;
-    opacity: 0.2;
+    opacity: 0.5;
     z-index: -1;
     width: 180px;
     height: 180px;
@@ -315,7 +315,7 @@ h1 {
 
 /* Superior esquerda */
 .img1 {
-    top: 40px;
+    top: 10%;
     left: 30%;
     width: 140px;
     background-image: url('img/img1.jpeg');
@@ -323,7 +323,7 @@ h1 {
 
 /* Meio direita */
 .img2 {
-    top: 50%;
+    top: 30%;
     right: 32%;
     transform: translateY(-50%);
     width: 120px;
@@ -332,7 +332,7 @@ h1 {
 
 /* Inferior esquerda */
 .img3 {
-    bottom: 120px;
+    bottom: 40%;
     left: 30%;
     width: 180px;
     background-image: url('img/img3.jpeg');
