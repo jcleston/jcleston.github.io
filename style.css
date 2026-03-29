@@ -360,7 +360,19 @@ h1 {
         bottom: 30px;
         left: 5%;
     }
+
+    .bg-slider {
+        width: 100%;
+        height: 100%;
+    }
+
+    .convite {
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 25%;
+    }
 }
+
 /* ========================= */
 /* BACKGROUND SLIDER */
 /* ========================= */
@@ -395,12 +407,4 @@ h1 {
 /* SLIDE ATIVO */
 .bg-slide.active {
     opacity: 0.5;
-}
-
-/* MOBILE */
-@media (max-width: 600px) {
-    .bg-slider {
-        width: 100%;
-        height: 100%;
-    }
 }
