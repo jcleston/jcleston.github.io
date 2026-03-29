@@ -408,3 +408,40 @@ h1 {
 .bg-slide.active {
     opacity: 0.5;
 }
+
+/* ========================= */
+/* RODAPÉ FIXO */
+/* ========================= */
+.rodape-fixo {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    z-index: 999;
+}
+
+/* CONTADOR MENOR NO RODAPÉ */
+.rodape-fixo #contador {
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.rodape-fixo #contador div {
+    padding: 8px;
+    min-width: 60px;
+}
+
+.rodape-fixo #contador span {
+    font-size: 16px;
+}
+
+/* BOTÃO */
+.rodape-fixo .btn {
+    width: 90%;
+    max-width: 300px;
+    text-align: center;
+}
