@@ -1,101 +1,44 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbxcSwNMDZsidDrp2FVvuoVw4ZsJvR6W_CIYxyokNra5rJn3OjEmW66OEMvYJy0cVlBg/exec";
 
-document.addEventListener("DOMContentLoaded", () => {
+// =======================
+// ESTADO GLOBAL
+// =======================
+let presenteSelecionado = null;
 
-    // =======================
-    // PRELOADER
-    // =======================
-    function mostrarLoader() {
-        document.getElementById("preloader").style.display = "flex";
-    }
 
-    function esconderLoader() {
-        document.getElementById("preloader").style.display = "none";
-    }
+// =======================
+// PRELOADER
+// =======================
+function mostrarLoader() {
+    document.getElementById("preloader").style.display = "flex";
+}
 
-    // =======================
-    // MODAL
-    // =======================
-    let presenteSelecionado = null;
-    let botaoSelecionado = null;
+function esconderLoader() {
+    document.getElementById("preloader").style.display = "none";
+}
 
-    const modal = document.getElementById("modal");
-    const nomeInput = document.getElementById("nomeInput");
-    const cancelarBtn = document.getElementById("cancelarBtn");
-    const confirmarBtn = document.getElementById("confirmarBtn");
 
-    function abrirModal(id, botao) {
-        presenteSelecionado = id;
-        botaoSelecionado = botao;
-        nomeInput.value = "";
-        modal.style.display = "flex";
-        nomeInput.focus();
-    }
+// =======================
+// CARREGAR PRESENTES
+// =======================
+async function carregarPresentes() {
+    mostrarLoader();
 
-    function fecharModal() {
-        modal.style.display = "none";
-    }
+    try {
+        const res = await fetch(API_URL);
+        const dados = await res.json();
 
-    cancelarBtn.onclick = fecharModal;
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
 
-    confirmarBtn.onclick = () => {
-        const nome = nomeInput.value.trim();
+        dados.forEach(item => {
 
-        if (!nome) {
-            alert("Nome obrigatório!");
-            return;
-        }
+            const reservado = item.nome && item.nome.trim() !== "";
 
-        fecharModal();
-        reservar(presenteSelecionado, botaoSelecionado, nome);
-    };
+            const card = document.createElement("div");
+            card.className = "card";
 
-    // =======================
-    // CRIAR CARD
-    // =======================
-    function criarCard(item) {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const botao = document.createElement("button");
-        botao.textContent = "Reservar";
-
-        botao.addEventListener("click", () => abrirModal(item.id, botao));
-
-        card.innerHTML = `
-            <img src="${item.imagem || 'https://via.placeholder.com/300'}">
-            <div class="card-content">
-                <h3>${item.presente}</h3>
-                <a href="${item.link}" target="_blank">Ver produto</a>
-            </div>
-        `;
-
-        card.querySelector(".card-content").appendChild(botao);
-
-        return card;
-    }
-
-    // =======================
-    // CARREGAR
-    // =======================
-    async function carregarPresentes() {
-        mostrarLoader();
-
-        try {
-            const res = await fetch(API_URL);
-            const dados = await res.json();
-
-            const lista = document.getElementById("lista");
-            lista.innerHTML = "";
-
-            dados.forEach(item => {
-
-                const reservado = item.status && !item.status.toLowerCase().includes("dispon");
-
-                const card = document.createElement("div");
-                card.className = "card";
-
-                card.innerHTML = `
+            card.innerHTML = `
                 <img src="${item.imagem || 'https://via.placeholder.com/300'}" alt="${item.presente}">
                 
                 <div class="card-content">
@@ -104,58 +47,116 @@ document.addEventListener("DOMContentLoaded", () => {
                     <a href="${item.link}" target="_blank">Ver produto</a>
 
                     ${reservado
-                        ? `<p class="reservado">Reservado por: <strong>${item.nome || 'Alguém'}</strong></p>
-                           <button disabled class="btn-reservado">Indisponível</button>`
-                        : `<button onclick="reservar(${item.id})">Reservar</button>`
-                    }
+                    ? `
+                        <p class="reservado">Reservado por: <strong>${item.nome}</strong></p>
+                        <button disabled class="btn-reservado">Indisponível</button>
+                        `
+                    : `
+                        <button onclick="reservar(${item.id})">Reservar</button>
+                        `
+                }
                 </div>
             `;
 
-                lista.appendChild(card);
-            });
+            lista.appendChild(card);
+        });
 
-        } catch (erro) {
-            console.error("Erro ao carregar:", erro);
-            alert("Erro ao carregar lista.");
-        }
-
-        esconderLoader();
+    } catch (erro) {
+        console.error("Erro ao carregar:", erro);
+        alert("Erro ao carregar lista.");
     }
 
-    // =======================
-    // RESERVAR
-    // =======================
-    async function reservar(id, botao, nome) {
-        botao.disabled = true;
-        botao.textContent = "Reservando...";
+    esconderLoader();
+}
+
+
+// =======================
+// ABRIR MODAL
+// =======================
+function reservar(id) {
+    presenteSelecionado = id;
+
+    document.getElementById("modal").style.display = "flex";
+    document.getElementById("nomeInput").value = "";
+}
+
+
+// =======================
+// CONTROLE DO MODAL
+// =======================
+function configurarModal() {
+
+    const modal = document.getElementById("modal");
+    const cancelarBtn = document.getElementById("cancelarBtn");
+    const confirmarBtn = document.getElementById("confirmarBtn");
+    const nomeInput = document.getElementById("nomeInput");
+
+    // Fechar modal
+    cancelarBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    // Confirmar reserva
+    confirmarBtn.addEventListener("click", async () => {
+
+        const nome = nomeInput.value.trim();
+
+        if (!nome) {
+            alert("Digite seu nome!");
+            return;
+        }
 
         mostrarLoader();
 
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({ id, nome })
+                body: JSON.stringify({
+                    id: presenteSelecionado,
+                    nome: nome
+                })
             });
 
             const resultado = await res.json();
 
             if (resultado.sucesso) {
-                botao.closest(".card").remove();
+                alert("Reservado com sucesso!");
             } else {
-                alert("Já foi reservado!");
+                alert("Este presente já foi reservado!");
             }
 
+            modal.style.display = "none";
+
+            await carregarPresentes();
+
         } catch (erro) {
-            console.error(erro);
+            console.error("Erro:", erro);
             alert("Erro ao reservar.");
         }
 
         esconderLoader();
-    }
+    });
 
-    // =======================
-    // INIT
-    // =======================
+    // ENTER confirma
+    nomeInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            confirmarBtn.click();
+        }
+    });
+
+    // Clique fora fecha modal
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+}
+
+
+// =======================
+// INICIALIZAÇÃO
+// =======================
+document.addEventListener("DOMContentLoaded", () => {
     carregarPresentes();
-
+    configurarModal();
 });
