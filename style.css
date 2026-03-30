@@ -445,3 +445,18 @@ h1 {
     max-width: 300px;
     text-align: center;
 }
+
+/* ========================= */
+/* STATUS RESERVADO */
+/* ========================= */
+.reservado {
+    font-size: 14px;
+    color: #dc3545;
+    margin-bottom: 10px;
+}
+
+/* BOTÃO DESATIVADO */
+.btn-reservado {
+    background: #ccc !important;
+    cursor: not-allowed;
+}

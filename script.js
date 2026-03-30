@@ -88,25 +88,38 @@ document.addEventListener("DOMContentLoaded", () => {
             const lista = document.getElementById("lista");
             lista.innerHTML = "";
 
-            const disponiveis = dados.filter(item =>
-                item.status && item.status.toLowerCase().includes("dispon")
-            );
+            dados.forEach(item => {
 
-            if (disponiveis.length === 0) {
-                lista.innerHTML = "<p>Nenhum presente disponível 🎉</p>";
-                return;
-            }
+                const reservado = item.status && !item.status.toLowerCase().includes("dispon");
 
-            disponiveis.forEach(item => {
-                lista.appendChild(criarCard(item));
+                const card = document.createElement("div");
+                card.className = "card";
+
+                card.innerHTML = `
+                <img src="${item.imagem || 'https://via.placeholder.com/300'}" alt="${item.presente}">
+                
+                <div class="card-content">
+                    <h3>${item.presente}</h3>
+
+                    <a href="${item.link}" target="_blank">Ver produto</a>
+
+                    ${reservado
+                        ? `<p class="reservado">Reservado por: <strong>${item.nome || 'Alguém'}</strong></p>
+                           <button disabled class="btn-reservado">Indisponível</button>`
+                        : `<button onclick="reservar(${item.id})">Reservar</button>`
+                    }
+                </div>
+            `;
+
+                lista.appendChild(card);
             });
 
         } catch (erro) {
-            console.error(erro);
+            console.error("Erro ao carregar:", erro);
             alert("Erro ao carregar lista.");
-        } finally {
-            esconderLoader();
         }
+
+        esconderLoader();
     }
 
     // =======================
